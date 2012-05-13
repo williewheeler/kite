@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!--
+===============================================================================
+$Id: kite-0.3-a3.xsd 43 2010-03-14 01:25:48Z willie.wheeler $
+
+Copyright (c) 2010 the original author or authors.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+===============================================================================
+-->
+<xsd:schema xmlns="http://springinpractice.com/schema/kite"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:tool="http://www.springframework.org/schema/tool"
+	targetNamespace="http://springinpractice.com/schema/kite"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<xsd:import namespace="http://www.springframework.org/schema/beans"
+		schemaLocation="http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"/>
+	<xsd:import namespace="http://www.springframework.org/schema/tool"
+		schemaLocation="http://www.springframework.org/schema/tool/spring-tool-3.0.xsd"/>
+
+	<xsd:annotation>
+		<xsd:documentation><![CDATA[
+Defines the configuration elements for Kite.
+		]]></xsd:documentation>
+	</xsd:annotation>
+
+	<xsd:element name="annotation-config">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[
+Enables annotation support for Kite components.
+			]]></xsd:documentation>
+		</xsd:annotation>
+		
+		<!-- TODO Figure out whether this makes sense. May want to interleave
+		     various Kite interceptors with other interceptors (like transactions) -->
+		<xsd:complexType>
+			<xsd:attribute name="order" type="xsd:integer">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+Defines the order of the Kite advice that is applied to beans annotated with
+the various Kite annotations (e.g., @GuardedByCircuitBreaker).
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	
+	
+	<!-- ================================================================== -->
+	<!-- Circuit breakers                                                   -->
+	<!-- ================================================================== -->
+	
+	<xsd:element name="circuit-breaker">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[
+Creates a CircuitBreakerTemplate bean having the specified configuration.
+			]]></xsd:documentation>
+			<xsd:appinfo>
+				<tool:annotation>
+					<tool:exports type="kite.circuitbreaker.CircuitBreakerTemplate" />
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="beans:identifiedType">
+					<xsd:attribute name="exceptionThreshold" type="xsd:integer" />
+					<xsd:attribute name="timeout" type="xsd:long" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="circuit-breaker-advice">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[
+Creates a CircuitBreakerInterceptor bean having the specified configuration.
+			]]></xsd:documentation>
+			<xsd:appinfo>
+				<tool:annotation>
+					<tool:exports type="kite.circuitbreaker.interceptor.CircuitBreakerInterceptor" />
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="beans:identifiedType">
+					<xsd:attribute name="breaker" type="xsd:string" use="required">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<tool:annotation kind="ref">
+									<tool:expected-type type="kite.circuitbreaker.CircuitBreakerTemplate" />
+								</tool:annotation>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:attribute>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	
+	<!-- ================================================================== -->
+	<!-- Throttles                                                          -->
+	<!-- ================================================================== -->
+
+	<xsd:element name="throttle">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[
+Creates a ThrottleTemplate having the specified configuration.
+			]]></xsd:documentation>
+			<xsd:appinfo>
+				<tool:annotation>
+					<tool:exports type="kite.throttle.ThrottleTemplate" />
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="beans:identifiedType">
+					<xsd:attribute name="limit" type="xsd:integer" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="throttle-advice">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[
+Creates a ThrottleInterceptor bean having the specified configuration.
+			]]></xsd:documentation>
+			<xsd:appinfo>
+				<tool:annotation>
+					<tool:exports type="kite.throttle.interceptor.ThrottleInterceptor" />
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="beans:identifiedType">
+					<xsd:attribute name="throttle" type="xsd:string">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<tool:annotation kind="ref">
+									<tool:expected-type type="kite.throttle.ThrottleTemplate" />
+								</tool:annotation>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:attribute>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>
