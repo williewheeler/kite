@@ -69,8 +69,7 @@ public class CircuitBreakerTemplate implements BeanNameAware {
 	private String beanName;
 	private int exceptionThreshold = 5;
 	private long timeout = 30000L;
-	private List<Class<? extends Exception>> handledExceptions =
-		new ArrayList<Class<? extends Exception>>();
+	private List<Class<? extends Exception>> handledExceptions = new ArrayList<Class<? extends Exception>>();
 
 	// Volatile state
 	private volatile State state = State.CLOSED;
