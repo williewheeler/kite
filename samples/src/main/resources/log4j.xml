@@ -8,7 +8,7 @@
 			<param name="ConversionPattern" value="%d %-5p %.10t %c - %m%n" />
 		</layout> 
 	</appender>
-	<logger name="com.williewheeler.kite">
+	<logger name="org.zkybase.kite">
 		<level value="debug" />
 	</logger>
 	<logger name="org.springframework">

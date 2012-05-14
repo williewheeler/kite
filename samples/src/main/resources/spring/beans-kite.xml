@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
+<beans:beans xmlns="http://zkybase.org/schema/kite"
+	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://zkybase.org/schema/kite http://zkybase.org/schema/kite/kite-1.0-a2.xsd">
 
 	<context:mbean-export />
 	
-	<bean id="messageServiceBreaker"
-		class="com.williewheeler.kite.circuitbreaker.CircuitBreakerTemplate"
-		p:exceptionThreshold="3"
-		p:timeout="30000" />
-</beans>
+	<annotation-config order="0" />
+	
+	<!-- Message service -->
+	<circuit-breaker id="messageServiceBreaker" exceptionThreshold="3" timeout="30000" />
+	<throttle id="messageServiceThrottle" limit="1" />
+	
+	<!-- User service -->
+	<circuit-breaker id="userServiceBreaker" exceptionThreshold="3" timeout="30000" />
+	
+</beans:beans>

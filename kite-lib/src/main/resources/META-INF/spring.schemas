@@ -1,2 +1,2 @@
-http\://springinpractice.com/schema/kite/kite-0.3-a3.xsd=kite/config/kite-0.3-a3.xsd
-http\://springinpractice.com/schema/kite/kite.xsd=kite/config/kite-0.3-a3.xsd
+http\://zkybase.org/schema/kite/kite-1.0-a2.xsd=kite/config/kite-1.0-a2.xsd
+http\://zkybase.org/schema/kite/kite.xsd=kite/config/kite-1.0-a2.xsd

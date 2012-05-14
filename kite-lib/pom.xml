@@ -4,13 +4,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
+	
 	<parent>
-		<groupId>com.williewheeler.kite</groupId>
-		<artifactId>com.williewheeler.kite</artifactId>
+		<groupId>org.zkybase.kite</groupId>
+		<artifactId>kite</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>com.williewheeler.kite.lib</artifactId>
+	
+	<artifactId>kitelib</artifactId>
+	
 	<name>Kite Library</name>
 	<description>The component library</description>
 	

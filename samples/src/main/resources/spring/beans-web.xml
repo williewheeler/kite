@@ -12,7 +12,7 @@
 	<mvc:annotation-driven />
 	<mvc:default-servlet-handler />
 	
-	<context:component-scan base-package="com.williewheeler.kite.samples.web" />
+	<context:component-scan base-package="org.zkybase.kite.samples.web" />
 	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:viewClass="org.springframework.web.servlet.view.JstlView"
