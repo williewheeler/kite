@@ -12,7 +12,7 @@ hand, with Kite you don't need to do that. Instead all it takes
 is two steps. First, you'll need to create the circuit breaker
 and throttle:
 
-<beans:beans xmlns="http://springinpractice.com/schema/kite"
+<beans:beans xmlns="http://zkybase.org/schema/kite"
     xmlns:beans="http://www.springframework.org/schema/beans"
     xmlns:context="http://www.springframework.org/schema/context" ...>
 
