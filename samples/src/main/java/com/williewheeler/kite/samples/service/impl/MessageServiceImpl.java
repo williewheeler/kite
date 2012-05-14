@@ -15,9 +15,15 @@ public class MessageServiceImpl implements MessageService {
 	 * @see com.williewheeler.kite.samples.service.MessageService#getMotd()
 	 */
 	public Message getMotd() {
+		simulateFlakiness();
 		Message motd = new Message();
 		motd.setHtmlText("<p>Welcome to Aggro's Towne!</p>");
 		return motd;
 	}
-
+	
+	private void simulateFlakiness() {
+		if (Math.random() < 0.4) {
+			throw new RuntimeException("Oops, service down");
+		}
+	}
 }

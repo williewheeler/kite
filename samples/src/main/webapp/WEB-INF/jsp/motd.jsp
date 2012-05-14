@@ -14,9 +14,15 @@
 		<section>
 			<header>
 				<h2>Message of the day</h2>
-				<div>
-					<c:out value="${motd.htmlText}" escapeXml="false" />
-				</div>
+				
+				<c:choose>
+					<c:when test="${not empty motd}">
+						<c:out value="${motd.htmlText}" escapeXml="false" />
+					</c:when>
+					<c:otherwise>
+						<p>[Message unavailable]</p>
+					</c:otherwise>
+				</c:choose>
 			</header>
 		</section>
 	</body>
