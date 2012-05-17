@@ -4,6 +4,7 @@ and capacity. Based in part upon patterns in the Release It! book
 by Michael Nygard.
 
 HARDEN YOUR APP IN TWO EASY STEPS
+=======================
 
 Let's say you want to protect an integration point with a
 so-called circuit breaker on the client side and a throttle on
@@ -12,6 +13,7 @@ hand, with Kite you don't need to do that. Instead all it takes
 is two steps. First, you'll need to create the circuit breaker
 and throttle:
 
+```xml
 <beans:beans xmlns="http://zkybase.org/schema/kite"
     xmlns:beans="http://www.springframework.org/schema/beans"
     xmlns:context="http://www.springframework.org/schema/context" ...>
@@ -28,10 +30,12 @@ and throttle:
     <context:mbean-export />
 
 </beans:beans>
+```
 
 Second, you'll need to annotate the service methods. I'm assuming
 a transactional service here, though that's not required:
 
+```java
 @Service
 @Transactional(
     propagation = Propagation.REQUIRED,
@@ -47,6 +51,7 @@ public class MessageServiceImpl implements MessageService {
     @GuardedByThrottle("messageServiceThrottle")
     public List<Message> getMessages() { ... }
 }
+```
 
 Voila: all calls to the service methods are now guarded by (1) a
 breaker that trips after three consecutive exceptions, and
@@ -62,16 +67,17 @@ Besides the annotation-based approach illustrated above, the
 standard template- and AOP-based approaches are also available.
 
 OVERVIEW OF COMPONENTS
+=======================
 
 This is a brand-new project, so there's not much yet, but here's
 what exists now:
 
-CIRCUIT BREAKER: Trips after a configurable number of consecutive
+**CIRCUIT BREAKER:** Trips after a configurable number of consecutive
 exceptions, and retries after a configurable timeout. Eventually
 it will be possible to trip based of failure rates, and it will
 be possible to select specific exception types.
 
-THROTTLE: A fail-fast concurrency throttle that rejects requests
+**THROTTLE:** A fail-fast concurrency throttle that rejects requests
 once a configurable concurrency limit is reached. Eventually
 throttles will be able to reject requests based on failure to
 meet SLAs.
