@@ -1,5 +1,5 @@
-Kite is a Spring-based library of components implementing various patterns for managing app and service availability,
-performance and capacity. Based in part upon patterns in the Release It! book by Michael Nygard.
+Kite is a Spring-based library of components, called _guards_, implementing various patterns for managing app/service
+availability, performance and capacity. It's based in part upon patterns in the Release It! book by Michael Nygard.
 
 Harden your app in two easy steps
 =================================
