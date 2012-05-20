@@ -68,8 +68,8 @@ tripping, resetting, etc. by your NOC should the need arise.
 Besides the annotation-based approach illustrated above, the standard template- and AOP-based approaches are also
 available.
 
-Overview of components
-======================
+Available guards
+================
 
 This is a new-ish project, so there's not much yet, but here's what exists now:
 
@@ -82,3 +82,6 @@ is reached. Eventually throttles will be able to reject requests based on failur
 
 **Rate-limiting throttle:** A throttle that rejects requests after the client reaches a configurable limit on the
 number of requests in some time period.
+
+I very much welcome contributions. It's pretty easy to add a new guard; just look at `org.zkybase.kite.guard` to see how
+to do it.
