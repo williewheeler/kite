@@ -7,15 +7,18 @@
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
-		http://zkybase.org/schema/kite http://zkybase.org/schema/kite/kite-1.0-a2.xsd">
+		http://zkybase.org/schema/kite http://zkybase.org/schema/kite/kite-1.0-a3.xsd">
 
 	<context:mbean-export />
 	
 	<annotation-config order="0" />
 	
+	<!-- Common -->
+<!-- 	<rate-limiting-throttle id="rateLimitingThrottle" limit="5000" /> -->
+	
 	<!-- Message service -->
 	<circuit-breaker id="messageServiceBreaker" exceptionThreshold="3" timeout="30000" />
-	<throttle id="messageServiceThrottle" limit="1" />
+	<concurrency-throttle id="messageServiceConcurrencyThrottle" limit="1" />
 	
 	<!-- User service -->
 	<circuit-breaker id="userServiceBreaker" exceptionThreshold="3" timeout="30000" />

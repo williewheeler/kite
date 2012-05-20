@@ -1,0 +1,9 @@
+========================================================================================================================
+[DONE]
+
+Allow multiple breakers of a given type to be applied to a method. For example, we should be able to place multiple
+rate-limiting throttles on a method: one allowing 60 requests per minute, and another allowing 1800 per hour. Right now
+this isn't possible using the annotations. This would work:
+
+@GuardedBy({ "messageServiceBreaker", "perMinuteRateLimitingThrottle", "perHourRateLimitingThrottle" })
+========================================================================================================================

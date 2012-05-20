@@ -13,29 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.zkybase.kite.circuitbreaker.interceptor;
-
-import java.lang.reflect.Method;
-
-import org.zkybase.kite.circuitbreaker.CircuitBreakerTemplate;
-
+package org.zkybase.kite.exception;
 
 /**
- * @author Willie Wheeler
+ * Runtime exception indicating that a call protected by a throttle failed due to too many concurrent threads.
+ * 
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
  */
-public class DefaultCircuitBreakerSource implements CircuitBreakerSource {
-	private CircuitBreakerTemplate breaker;
-	
-	public CircuitBreakerTemplate getBreaker() {
-		return breaker;
+@SuppressWarnings("serial")
+public class ConcurrencyLimitExceededException extends GuardException {
+	private int limit;
+
+	public ConcurrencyLimitExceededException(int limit) {
+		super("Concurrency limit is " + limit);
+		this.limit = limit;
 	}
 
-	public void setBreaker(CircuitBreakerTemplate breaker) {
-		this.breaker = breaker;
-	}
-
-	public CircuitBreakerTemplate getBreaker(Method method, Class<?> targetClass) {
-		return breaker;
-	}
+	public int getLimit() { return limit; }
 }

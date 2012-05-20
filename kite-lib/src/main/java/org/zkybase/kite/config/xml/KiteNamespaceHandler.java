@@ -22,7 +22,7 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 /**
  * <code>NamespaceHandler</code> allowing for declarative Kite configuration using either XML or using annotations.
  * 
- * @author Willie Wheeler
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
  */
 public class KiteNamespaceHandler extends NamespaceHandlerSupport {
@@ -35,9 +35,8 @@ public class KiteNamespaceHandler extends NamespaceHandlerSupport {
 	public void init() {
 		log.info("Initializing KiteNamespaceHandler");
 		registerBeanDefinitionParser("annotation-config", new AnnotationConfigParser());
+		registerBeanDefinitionParser("guard-list-advice", new GuardListAdviceParser());
 		registerBeanDefinitionParser("circuit-breaker", new CircuitBreakerParser());
-		registerBeanDefinitionParser("circuit-breaker-advice", new CircuitBreakerAdviceParser());
-		registerBeanDefinitionParser("throttle", new ThrottleParser());
-		registerBeanDefinitionParser("throttle-advice", new ThrottleAdviceParser());
+		registerBeanDefinitionParser("concurrency-throttle", new ConcurrencyThrottleParser());
 	}
 }

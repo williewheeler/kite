@@ -18,30 +18,25 @@ package org.zkybase.kite.config.xml;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;
-import org.zkybase.kite.throttle.ThrottleTemplate;
+import org.zkybase.kite.guard.ConcurrencyThrottleTemplate;
 
 
 /**
- * <p>
- * Parses <code>&lt;kite:throttle&gt;</code> elements in Spring application
- * context configuration files.
- * </p>
+ * Parses <code>&lt;kite:concurrency-throttle&gt;</code> elements in Spring application context configuration files.
  * 
- * @version $Id$
- * @author Willie Wheeler
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
  */
-class ThrottleParser extends AbstractSingleBeanDefinitionParser {
+class ConcurrencyThrottleParser extends AbstractSingleBeanDefinitionParser {
 	
 	@Override
 	protected Class<?> getBeanClass(Element elem) {
-		return ThrottleTemplate.class;
+		return ConcurrencyThrottleTemplate.class;
 	}
 	
 	@Override
 	protected void doParse(Element elem, BeanDefinitionBuilder builder) {
-		// FIXME Hm, would like to set the bean definition's source, but the
-		// builder.setSource() method is deprecated...
+		// FIXME Hm, would like to set the bean definition's source, but the builder.setSource() method is deprecated...
 		builder.addConstructorArgValue(elem.getAttribute("limit"));
 	}
 }

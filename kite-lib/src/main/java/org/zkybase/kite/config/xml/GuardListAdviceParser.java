@@ -21,24 +21,24 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.w3c.dom.Element;
-import org.zkybase.kite.circuitbreaker.interceptor.CircuitBreakerInterceptor;
-import org.zkybase.kite.circuitbreaker.interceptor.DefaultCircuitBreakerSource;
+import org.zkybase.kite.interceptor.DefaultGuardListSource;
+import org.zkybase.kite.interceptor.GuardListInterceptor;
 
 
 /**
- * Parses <code>&lt;kite:circuit-breaker-advice&gt;</code> elements in Spring application context configuration files.
+ * Parses <code>&lt;kite:guard-list-advice&gt;</code> elements in Spring application context configuration files.
  * 
- * @author Willie Wheeler
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
  */
-class CircuitBreakerAdviceParser extends AbstractSingleBeanDefinitionParser {
+class GuardListAdviceParser extends AbstractSingleBeanDefinitionParser {
 	
 	/* (non-Javadoc)
 	 * @see org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser#getBeanClass(org.w3c.dom.Element)
 	 */
 	@Override
 	protected Class<?> getBeanClass(Element elem) {
-		return CircuitBreakerInterceptor.class;
+		return GuardListInterceptor.class;
 	}
 	
 	/* (non-Javadoc)
@@ -49,12 +49,11 @@ class CircuitBreakerAdviceParser extends AbstractSingleBeanDefinitionParser {
 	protected void doParse(Element elem, BeanDefinitionBuilder builder) {
 		builder.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 		
-		// If an advice is explicitly defined, then we're using the
-		// DefaultCircuitBreakerSource.
-		RootBeanDefinition srcDef = new RootBeanDefinition(DefaultCircuitBreakerSource.class);
+		// If an advice is explicitly defined, then we're using the DefaultCircuitBreakerSource.
+		RootBeanDefinition srcDef = new RootBeanDefinition(DefaultGuardListSource.class);
 		srcDef.setSource(elem);
 		srcDef.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		srcDef.getPropertyValues().add("breaker", new RuntimeBeanReference(elem.getAttribute("breaker")));
-		builder.addPropertyValue("circuitBreakerSource", srcDef);
+		srcDef.getPropertyValues().add("guardList", new RuntimeBeanReference(elem.getAttribute("guardList")));
+		builder.addPropertyValue("source", srcDef);
 	}
 }

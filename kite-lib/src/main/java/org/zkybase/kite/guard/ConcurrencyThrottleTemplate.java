@@ -13,33 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.zkybase.kite.throttle;
+package org.zkybase.kite.guard;
 
 import java.util.concurrent.Semaphore;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
+import org.zkybase.kite.AbstractGuard;
+import org.zkybase.kite.GuardCallback;
+import org.zkybase.kite.exception.ConcurrencyLimitExceededException;
 
 /**
  * <p>
- * Template component that fails with an exception when a concurrency threshold
- * is exceeded.
+ * Template component that fails with an exception when a concurrency threshold is exceeded.
  * </p>
  * <p>
  * Implementation is based on a counting semaphore.
  * </p>
  * 
- * @author Willie Wheeler
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
  */
 @ManagedResource
-public class ThrottleTemplate implements BeanNameAware {
-	private static Logger log = LoggerFactory.getLogger(ThrottleTemplate.class);
+public class ConcurrencyThrottleTemplate extends AbstractGuard {
+	private static Logger log = LoggerFactory.getLogger(ConcurrencyThrottleTemplate.class);
 	
-	private String beanName;
 	private final int limit;
 	private final Semaphore semaphore;
 
@@ -47,7 +47,7 @@ public class ThrottleTemplate implements BeanNameAware {
 	 * @param limit
 	 * @throws IllegalArgumentException if limit &lt; 1
 	 */
-	public ThrottleTemplate(int limit) {
+	public ConcurrencyThrottleTemplate(int limit) {
 		if (limit < 1) {
 			throw new IllegalArgumentException("limit must be >= 1");
 		}
@@ -55,20 +55,15 @@ public class ThrottleTemplate implements BeanNameAware {
 		this.semaphore = new Semaphore(limit, true);
 	}
 	
-	@ManagedAttribute(description = "Throttle name")
-	public String getBeanName() { return beanName; }
-	
-	public void setBeanName(String beanName) { this.beanName = beanName; }
-	
 	@ManagedAttribute(description = "Concurrency limit, after which requests are rejected")
 	public int getLimit() { return limit; }
 	
-	public <T> T execute(ThrottleCallback<T> action) throws Exception {
-		log.debug("Entered concurrency throttle");
+	public <T> T execute(GuardCallback<T> action) throws Throwable {
+		log.debug("Entered concurrency throttle: {}", getName());
 		try {
 			if (semaphore.tryAcquire()) {
 				try {
-					return action.doInThrottle();
+					return action.doInGuard();
 				} finally {
 					semaphore.release();
 				}
@@ -77,7 +72,7 @@ public class ThrottleTemplate implements BeanNameAware {
 				throw new ConcurrencyLimitExceededException(limit);
 			}
 		} finally {
-			log.debug("Exiting concurrency throttle");
+			log.debug("Exiting concurrency throttle: {}", getName());
 		}
 	}
 }

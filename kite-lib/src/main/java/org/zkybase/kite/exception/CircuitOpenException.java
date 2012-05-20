@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.zkybase.kite.circuitbreaker;
-
-import org.springframework.core.NestedRuntimeException;
+package org.zkybase.kite.exception;
 
 /**
  * Runtime exception indicating that a call protected by a circuit breaker failed due to an open circuit.
@@ -24,7 +22,7 @@ import org.springframework.core.NestedRuntimeException;
  * @since 1.0
  */
 @SuppressWarnings("serial")
-public class CircuitOpenException extends NestedRuntimeException {
+public class CircuitOpenException extends GuardException {
 
 	public CircuitOpenException() {
 		super("Circuit open");

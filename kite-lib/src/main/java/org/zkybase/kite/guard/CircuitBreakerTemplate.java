@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.zkybase.kite.circuitbreaker;
+package org.zkybase.kite.guard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +21,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.util.Assert;
+import org.zkybase.kite.AbstractGuard;
+import org.zkybase.kite.GuardCallback;
+import org.zkybase.kite.exception.CircuitOpenException;
 
 /**
  * <p>
@@ -59,14 +61,13 @@ import org.springframework.util.Assert;
  * @since 1.0
  */
 @ManagedResource
-public class CircuitBreakerTemplate implements BeanNameAware {
+public class CircuitBreakerTemplate extends AbstractGuard {
 	public enum State { CLOSED, OPEN, HALF_OPEN };
 
 	private static final long NO_SCHEDULED_RETRY = Long.MAX_VALUE;
 	private static Logger log = LoggerFactory.getLogger(CircuitBreakerTemplate.class);
 	
 	// Configuration
-	private String beanName;
 	private int exceptionThreshold = 5;
 	private long timeout = 30000L;
 	private List<Class<? extends Exception>> handledExceptions = new ArrayList<Class<? extends Exception>>();
@@ -79,20 +80,6 @@ public class CircuitBreakerTemplate implements BeanNameAware {
 	public CircuitBreakerTemplate() {
 		handledExceptions.add(Exception.class);
 	}
-	
-	@ManagedAttribute(description = "Breaker name")
-	public String getBeanName() { return beanName; }
-
-	/**
-	 * <p>
-	 * Required by {@link org.springframework.beans.factory.BeanNameAware}. We
-	 * use this to log state transitions.
-	 * </p>
-	 * 
-	 * @param beanName
-	 *            bean's name (or ID)
-	 */
-	public void setBeanName(String beanName) { this.beanName = beanName; }
 
 	/**
 	 * <p>
@@ -179,7 +166,7 @@ public class CircuitBreakerTemplate implements BeanNameAware {
 	public State getState() {
 		if (state == State.OPEN) {
 			if (System.currentTimeMillis() >= retryTime) {
-				log.info("Setting circuit breaker half-open: {}", beanName);
+				log.info("Setting circuit breaker half-open: {}", getName());
 				this.state = State.HALF_OPEN;
 			}
 		}
@@ -214,7 +201,7 @@ public class CircuitBreakerTemplate implements BeanNameAware {
 	 */
 	@ManagedOperation(description = "Resets the breaker")
 	public void reset() {
-		log.info("Resetting circuit breaker: {}", beanName);
+		log.info("Resetting circuit breaker: {}", getName());
 		this.state = State.CLOSED;
 		this.exceptionCount.set(0);
 	}
@@ -232,7 +219,7 @@ public class CircuitBreakerTemplate implements BeanNameAware {
 	public void tripWithoutAutoReset() { trip(false); }
 	
 	private void trip(boolean autoReset) {
-		log.warn("Tripping breaker {}, autoReset={}", beanName, autoReset);
+		log.warn("Tripping breaker {}, autoReset={}", getName(), autoReset);
 		this.state = State.OPEN;
 
 		// FIXME Don't want races to mosh explicit tripWithoutAutoReset() requests...
@@ -255,13 +242,13 @@ public class CircuitBreakerTemplate implements BeanNameAware {
 	 * @throws Exception
 	 *             exception thrown by the action, if any
 	 */
-	public <T> T execute(CircuitBreakerCallback<T> action) throws Exception {
+	public <T> T execute(GuardCallback<T> action) throws Throwable {
 		final State currState = getState();
 		switch (currState) {
 
 		case CLOSED:
 			try {
-				T value = action.doInCircuitBreaker();
+				T value = action.doInGuard();
 				this.exceptionCount.set(0);
 				return value;
 			} catch (Exception e) {
@@ -278,7 +265,7 @@ public class CircuitBreakerTemplate implements BeanNameAware {
 
 		case HALF_OPEN:
 			try {
-				T value = action.doInCircuitBreaker();
+				T value = action.doInGuard();
 				reset();
 				return value;
 			} catch (Exception e) {

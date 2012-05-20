@@ -28,51 +28,33 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
-import org.zkybase.kite.circuitbreaker.interceptor.AnnotationCircuitBreakerSource;
-import org.zkybase.kite.circuitbreaker.interceptor.CircuitBreakerInterceptor;
-import org.zkybase.kite.circuitbreaker.interceptor.CircuitBreakerSourcePointcut;
-import org.zkybase.kite.throttle.interceptor.AnnotationThrottleSource;
-import org.zkybase.kite.throttle.interceptor.ThrottleInterceptor;
-import org.zkybase.kite.throttle.interceptor.ThrottleSourcePointcut;
+import org.zkybase.kite.interceptor.AnnotationGuardListSource;
+import org.zkybase.kite.interceptor.GuardListInterceptor;
+import org.zkybase.kite.interceptor.GuardListSourcePointcut;
 
 
 /**
- * <p>
  * Parses &lt;kite:annotation-config&gt; into Kite infrastructure beans.
- * </p>
  * 
- * @version $Id: AnnotationConfigParser.java 75 2010-03-29 07:34:59Z willie.wheeler $
- * @author Willie Wheeler
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
  */
 class AnnotationConfigParser implements BeanDefinitionParser {
-	private static final String BREAKER_ADV_BEAN_NAME =
-		"kite.circuitbreaker.interceptor.internalCircuitBreakerAdvisor";
-	
-	private static final String THROTTLE_ADV_BEAN_NAME =
-		"kite.throttle.interceptor.internalThrottleAdvisor";
-	
-	private static final int BREAKER_ORDER = 0;
-	private static final int THROTTLE_ORDER = 1;
-	
-	private static Logger log = LoggerFactory.getLogger(AnnotationConfigParser.class);
+	private static final String GUARD_LIST_ADV_BEAN_NAME = "org.zkybase.kite.interceptor.internalGuardListAdvisor";
+	private static final Logger log = LoggerFactory.getLogger(AnnotationConfigParser.class);
 
 	public BeanDefinition parse(Element elem, ParserContext parserCtx) {
 		
-		// Right now only JDK 1.5 proxies are supported but later we'll support
-		// CGLIB too. See Spring's AnnotationDrivenBeanDefinitionParser (part of
-		// tx support) for implementation details.
+		// Right now only JDK 1.5 proxies are supported but later we'll support CGLIB too. See Spring's
+		// AnnotationDrivenBeanDefinitionParser (part of tx support) for implementation details.
 		new AopAutoProxyConfigurer(elem, parserCtx);
 		return null;
 	}
 	
 	/**
-	 * <p>
-	 * Inner class to avoid introducing an AOP framework dependency unless it's
-	 * actually required (i.e. unless we're in proxy mode). Right now that's the
-	 * only mode that's available, so this is more like preparation for adding
-	 * CGLIB support in the future.
-	 * </p>
+	 * Inner class to avoid introducing an AOP framework dependency unless it's actually required (i.e. unless we're in
+	 * proxy mode). Right now that's the only mode that's available, so this is more like preparation for adding CGLIB
+	 * support in the future.
 	 */
 	private static class AopAutoProxyConfigurer {
 		private final String tagName;
@@ -87,60 +69,33 @@ class AnnotationConfigParser implements BeanDefinitionParser {
 			this.reg = parserCtx.getRegistry();
 			this.src = parserCtx.extractSource(elem);
 			
-			this.baseOrder = elem.hasAttribute("order") ?
-				Integer.parseInt(elem.getAttribute("order")) : 0;
-			
+			this.baseOrder = elem.hasAttribute("order") ? Integer.parseInt(elem.getAttribute("order")) : 0;
 			AopNamespaceUtils.registerAutoProxyCreatorIfNecessary(parserCtx, elem);
-			configureBreaker();
-			configureThrottle();
+			configureGuardList();
 		}
 		
-		private void configureBreaker() {
-			if (reg.containsBeanDefinition(BREAKER_ADV_BEAN_NAME)) { return; }
+		private void configureGuardList() {
+			if (reg.containsBeanDefinition(GUARD_LIST_ADV_BEAN_NAME)) { return; }
 			
-			RootBeanDefinition sdef = createDef(AnnotationCircuitBreakerSource.class);
+			RootBeanDefinition sdef = createDef(AnnotationGuardListSource.class);
 			String sname = registerWithGeneratedName(sdef);
 			
-			RootBeanDefinition idef = createDef(CircuitBreakerInterceptor.class);
-			addRuntimeProp(idef, "circuitBreakerSource", sname);
+			RootBeanDefinition idef = createDef(GuardListInterceptor.class);
+			addRuntimeProp(idef, "source", sname);
 			String iname = registerWithGeneratedName(idef);
 			
-			RootBeanDefinition pdef = createDef(CircuitBreakerSourcePointcut.class);
+			RootBeanDefinition pdef = createDef(GuardListSourcePointcut.class);
 			addRuntimeProp(pdef, "source", sname);
 			String pname = registerWithGeneratedName(pdef);
 			
 			RootBeanDefinition adef = createDef(DefaultBeanFactoryPointcutAdvisor.class);
 			addProp(adef, "adviceBeanName", iname);
 			addRuntimeProp(adef, "pointcut", pname);
-			addOrderProp(adef, BREAKER_ORDER);
-			reg.registerBeanDefinition(BREAKER_ADV_BEAN_NAME, adef);
+			addOrderProp(adef, 0);
+			reg.registerBeanDefinition(GUARD_LIST_ADV_BEAN_NAME, adef);
 			
 			// TODO Add pointcut definition
-			doLogicalView(sdef, sname, idef, iname, adef, BREAKER_ADV_BEAN_NAME);
-		}
-		
-		private void configureThrottle() {
-			if (reg.containsBeanDefinition(THROTTLE_ADV_BEAN_NAME)) { return; }
-			
-			RootBeanDefinition sdef = createDef(AnnotationThrottleSource.class);
-			String sname = registerWithGeneratedName(sdef);
-			
-			RootBeanDefinition idef = createDef(ThrottleInterceptor.class);
-			addRuntimeProp(idef, "throttleSource", sname);
-			String iname = registerWithGeneratedName(idef);
-			
-			RootBeanDefinition pdef = createDef(ThrottleSourcePointcut.class);
-			addRuntimeProp(pdef, "source", sname);
-			String pname = registerWithGeneratedName(pdef);
-			
-			RootBeanDefinition adef = createDef(DefaultBeanFactoryPointcutAdvisor.class);
-			addProp(adef, "adviceBeanName", iname);
-			addRuntimeProp(adef, "pointcut", pname);
-			addOrderProp(adef, THROTTLE_ORDER);
-			reg.registerBeanDefinition(THROTTLE_ADV_BEAN_NAME, adef);
-			
-			// TODO Add pointcut definition
-			doLogicalView(sdef, sname, idef, iname, adef, THROTTLE_ADV_BEAN_NAME);
+			doLogicalView(sdef, sname, idef, iname, adef, GUARD_LIST_ADV_BEAN_NAME);
 		}
 		
 		

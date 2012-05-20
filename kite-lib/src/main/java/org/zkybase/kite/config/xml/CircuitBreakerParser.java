@@ -17,7 +17,7 @@ package org.zkybase.kite.config.xml;
 
 import org.springframework.beans.factory.xml.AbstractSimpleBeanDefinitionParser;
 import org.w3c.dom.Element;
-import org.zkybase.kite.circuitbreaker.CircuitBreakerTemplate;
+import org.zkybase.kite.guard.CircuitBreakerTemplate;
 
 
 /**
@@ -32,7 +32,5 @@ class CircuitBreakerParser extends AbstractSimpleBeanDefinitionParser {
 	 * @see org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser#getBeanClass(org.w3c.dom.Element)
 	 */
 	@Override
-	protected Class<?> getBeanClass(Element elem) {
-		return CircuitBreakerTemplate.class;
-	}
+	protected Class<?> getBeanClass(Element elem) { return CircuitBreakerTemplate.class; }
 }
