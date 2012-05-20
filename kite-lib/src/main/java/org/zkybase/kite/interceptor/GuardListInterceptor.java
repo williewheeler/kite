@@ -47,7 +47,7 @@ public class GuardListInterceptor implements MethodInterceptor {
 	public Object invoke(final MethodInvocation invocation) throws Throwable {
 		List<Guard> guards = getGuards(invocation);
 		
-		if (guards == null) {
+		if (guards == null || guards.isEmpty()) {
 			log.debug("Executing method {} without guards", invocation.getMethod().getName());
 			return invocation.proceed();
 		}

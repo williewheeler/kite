@@ -4,13 +4,19 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
+	
 	<groupId>org.zkybase.kite</groupId>
 	<artifactId>kite</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<name>Kite</name>
-	<description>Spring-based library of components to improve application stability.</description>
+	<description>
+		Spring-based library of components to improve application stability. These are based largely on ideas from
+		Michael Nygard's book, Release It! (Pragmatic).
+	</description>
+	<url>http://zkybase.org/</url>
+	<inceptionYear>2010</inceptionYear>
 	
 	<modules>
 		<module>kite-lib</module>
@@ -18,10 +24,17 @@
 	</modules>
 	
 	<properties>
+		<junit.version>4.10</junit.version>
+		<hamcrest.version>1.1</hamcrest.version>
+		<mockito.version>1.9.0</mockito.version>
 		<slf4j.version>1.6.4</slf4j.version>
 		<spring.version>3.1.1.RELEASE</spring.version>
 		<spring.security.version>3.1.0.RELEASE</spring.security.version>
 	</properties>
+	
+	<scm>
+		<url>https://github.com/williewheeler/kite</url>
+	</scm>
 	
 	<dependencyManagement>
 		<dependencies>
@@ -57,7 +70,7 @@
 				<optional>true</optional>
 			</dependency>
 			
-			<!-- Other -->
+			<!-- Logging -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
@@ -69,6 +82,56 @@
 				<version>${slf4j.version}</version>
 				<scope>runtime</scope>
 			</dependency>
+			
+			<!-- Test -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>org.hamcrest</groupId>
+						<artifactId>hamcrest-core</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>${mockito.version}</version>
+				<scope>test</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>org.hamcrest</groupId>
+						<artifactId>hamcrest-core</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-core</artifactId>
+				<version>${hamcrest.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-library</artifactId>
+				<version>${hamcrest.version}</version>
+				<scope>test</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	
+	<developers>
+		<developer>
+			<id>williewheeler</id>
+			<name>Willie Wheeler</name>
+			<email>willie.wheeler@gmail.com</email>
+			<url>http://springinpractice.com/</url>
+			<roles>
+				<role>Owner</role>
+			</roles>
+		</developer>
+	</developers>
 </project>
