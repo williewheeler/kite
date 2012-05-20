@@ -30,6 +30,7 @@ import org.zkybase.kite.samples.util.Flakinator;
  */
 @Service
 public class MessageServiceImpl implements MessageService {
+	private Flakinator flakinator = new Flakinator();
 
 	/* (non-Javadoc)
 	 * @see org.zkybase.kite.samples.service.MessageService#getMotd()
@@ -37,10 +38,11 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	@GuardedBy({
 		"messageServiceConcurrencyThrottle",
+		"rateLimitingThrottle",
 		"messageServiceBreaker"
 	})
 	public Message getMotd() {
-		Flakinator.simulateFlakiness();
+		flakinator.simulateFlakiness();
 		return createMessage("<p>Welcome to Aggro's Towne!</p>");
 	}
 
@@ -50,10 +52,11 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	@GuardedBy({
 		"messageServiceConcurrencyThrottle",
+		"rateLimitingThrottle",
 		"messageServiceBreaker"
 	})
 	public List<Message> getImportantMessages() {
-		Flakinator.simulateFlakiness();
+		flakinator.simulateFlakiness();
 		List<Message> messages = new ArrayList<Message>();
 		messages.add(createMessage("<p>Important message 1</p>"));
 		messages.add(createMessage("<p>Important message 2</p>"));

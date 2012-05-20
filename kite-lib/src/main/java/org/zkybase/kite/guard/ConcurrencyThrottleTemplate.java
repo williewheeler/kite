@@ -59,20 +59,15 @@ public class ConcurrencyThrottleTemplate extends AbstractGuard {
 	public int getLimit() { return limit; }
 	
 	public <T> T execute(GuardCallback<T> action) throws Throwable {
-		log.debug("Entered concurrency throttle: {}", getName());
-		try {
-			if (semaphore.tryAcquire()) {
-				try {
-					return action.doInGuard();
-				} finally {
-					semaphore.release();
-				}
-			} else {
-				log.warn("Request rejected: concurrency limit {} exceeded", limit);
-				throw new ConcurrencyLimitExceededException(limit);
+		if (semaphore.tryAcquire()) {
+			try {
+				return action.doInGuard();
+			} finally {
+				semaphore.release();
 			}
-		} finally {
-			log.debug("Exiting concurrency throttle: {}", getName());
+		} else {
+			log.warn("Request rejected: concurrency limit {} exceeded", limit);
+			throw new ConcurrencyLimitExceededException(limit);
 		}
 	}
 }

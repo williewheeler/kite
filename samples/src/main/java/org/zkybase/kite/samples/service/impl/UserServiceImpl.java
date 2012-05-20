@@ -30,13 +30,14 @@ import org.zkybase.kite.samples.util.Flakinator;
  */
 @Service
 public class UserServiceImpl implements UserService {
+	private Flakinator flakinator = new Flakinator();
 
 	/* (non-Javadoc)
 	 * @see org.zkybase.kite.samples.service.UserService#getRecentUsers()
 	 */
-	@GuardedBy({ "userServiceBreaker" })
+	@GuardedBy({ "rateLimitingThrottle", "userServiceBreaker" })
 	public List<User> getRecentUsers() {
-		Flakinator.simulateFlakiness();
+		flakinator.simulateFlakiness();
 		
 		List<User> users = new ArrayList<User>();
 		users.add(createUser("aggro_the_axe"));

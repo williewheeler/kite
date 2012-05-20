@@ -38,5 +38,6 @@ public class KiteNamespaceHandler extends NamespaceHandlerSupport {
 		registerBeanDefinitionParser("guard-list-advice", new GuardListAdviceParser());
 		registerBeanDefinitionParser("circuit-breaker", new CircuitBreakerParser());
 		registerBeanDefinitionParser("concurrency-throttle", new ConcurrencyThrottleParser());
+		registerBeanDefinitionParser("rate-limiting-throttle", new RateLimitingThrottleParser());
 	}
 }

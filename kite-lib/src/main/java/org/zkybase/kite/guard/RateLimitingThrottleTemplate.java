@@ -30,16 +30,11 @@ public class RateLimitingThrottleTemplate extends AbstractGuard {
 	public int getLimit() { return limit; }
 	
 	public <T> T execute(GuardCallback<T> action) throws Throwable {
-		log.debug("Entered rate-limiting throttle");
-		try {
-			if (withinLimit()) {
-				return action.doInGuard();
-			} else {
-				log.warn("Request rejected: rate limit {} exceeded", limit);
-				throw new RateLimitExceededException(limit);
-			}
-		} finally {
-			log.debug("Exiting rate-limiting throttle");
+		if (withinLimit()) {
+			return action.doInGuard();
+		} else {
+			log.warn("Request rejected: rate limit {} exceeded", limit);
+			throw new RateLimitExceededException(limit);
 		}
 	}
 	

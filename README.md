@@ -18,10 +18,11 @@ and throttle:
 
     <!-- Activate Kite annotations -->
     <annotation-config />
-
-    <!-- Create the circuit breaker and the throttle -->
+    
+    <!-- Guards -->
     <circuit-breaker id="messageServiceBreaker" exceptionThreshold="3" timeout="30000" />
     <concurrency-throttle id="messageServiceThrottle" limit="50" />
+    <rate-limiting-throttle id="messageServiceRateLimiter" limit="5000" />
 
     <!-- Export the breaker and throttle as MBeans -->
     <context:mbean-export />
@@ -37,19 +38,22 @@ required:
 @Transactional
 public class MessageServiceImpl implements MessageService {
 
-    @GuardedBy({ "messageServiceThrottle", "messageServiceBreaker" })
+    @GuardedBy({ "messageServiceThrottle", "messageServiceRateLimiter", "messageServiceBreaker" })
     public Message getMotd() { ... }
 
-    @GuardedBy({ "messageServiceThrottle", "messageServiceBreaker" })
+    @GuardedBy({ "messageServiceThrottle", "messageServiceRateLimiter", "messageServiceBreaker" })
     public List<Message> getMessages() { ... }
 }
 ```
 
-Voila: all calls to the service methods are now guarded by (1) a breaker that trips after three consecutive exceptions,
-and retries after 30 seconds, and (2) a fail-fast concurrency throttle that rejects requests once the limit of 50
-concurrent requests is exceeded. Kite knows that the circuit breaker goes in front of the throttle, so you don't need to
-worry about that. As an added bonus, the breaker and throttle are both exposed as MBeans for manual tripping, resetting,
-etc. by your NOC should the need arise.
+Voila: all calls to the service methods are now guarded by
+
+* a concurrency throttle that rejects requests once there are 50 concurrent requests in the guard
+* a rate-limiter that rejects anything beyond the first 5,000 requests in a given hour
+* a circuit breakers that trips after three consecutive exceptions, and retries after 30 seconds
+
+Kite applies the guards in the specified order. As an added bonus, the guards are both exposed as MBeans for manual
+tripping, resetting, etc. by your NOC should the need arise.
 
 Besides the annotation-based approach illustrated above, the standard template- and AOP-based approaches are also
 available.
@@ -63,5 +67,8 @@ This is a brand-new project, so there's not much yet, but here's what exists now
 timeout. Eventually it will be possible to trip based of failure rates, and it will be possible to select specific
 exception types.
 
-**Throttle:** A fail-fast concurrency throttle that rejects requests once a configurable concurrency limit is reached.
-Eventually throttles will be able to reject requests based on failure to meet SLAs.
+**Concurrency throttle:** A fail-fast concurrency throttle that rejects requests once a configurable concurrency limit
+is reached. Eventually throttles will be able to reject requests based on failure to meet SLAs.
+
+**Rate-limiting throttle:** A throttle that rejects requests after the client reaches a configurable limit on the
+number of requests in some time period.

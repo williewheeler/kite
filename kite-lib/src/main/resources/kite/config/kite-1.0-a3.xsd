@@ -43,23 +43,53 @@ Enables annotation support for Kite components.
 			]]></xsd:documentation>
 		</xsd:annotation>
 		
-		<!-- TODO Figure out whether this makes sense. May want to interleave
-		     various Kite interceptors with other interceptors (like transactions) -->
+		<!-- TODO Figure out whether this makes sense. May want to interleave various Kite interceptors with other
+		     interceptors (like transactions) -->
 		<xsd:complexType>
 			<xsd:attribute name="order" type="xsd:integer">
 				<xsd:annotation>
 					<xsd:documentation><![CDATA[
-Defines the order of the Kite advice that is applied to beans annotated with the various Kite annotations (e.g.,
-@GuardedByCircuitBreaker).
+Defines the order of the Kite advice that is applied to beans annotated with Kite's @GuardedBy annotation.
 					]]></xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 	
+	<!-- FIXME This isn't correct. The GuardListInterceptor doesn't have a settable guards property. -->
+	<!--
+	<xsd:element name="guard-list-advice">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[
+Creates a GuardListInterceptor bean having the specified configuration.
+			]]></xsd:documentation>
+			<xsd:appinfo>
+				<tool:annotation>
+					<tool:exports type="org.zkybase.kite.interceptor.GuardListInterceptor" />
+				</tool:annotation>
+			</xsd:appinfo>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="beans:identifiedType">
+					<xsd:attribute name="guards" type="xsd:string" use="required">
+						<xsd:annotation>
+							<xsd:appinfo>
+								<tool:annotation kind="ref">
+									<tool:expected-type type="java.util.List" />
+								</tool:annotation>
+							</xsd:appinfo>
+						</xsd:annotation>
+					</xsd:attribute>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	-->
+	
 	
 	<!-- =========================================================================================================== -->
-	<!-- Circuit breaker                                                                                             -->
+	<!-- Guards                                                                                                      -->
 	<!-- =========================================================================================================== -->
 	
 	<xsd:element name="circuit-breaker">
@@ -82,39 +112,6 @@ Creates a CircuitBreakerTemplate bean having the specified configuration.
 			</xsd:complexContent>
 		</xsd:complexType>
 	</xsd:element>
-	
-	<xsd:element name="circuit-breaker-advice">
-		<xsd:annotation>
-			<xsd:documentation><![CDATA[
-Creates a CircuitBreakerInterceptor bean having the specified configuration.
-			]]></xsd:documentation>
-			<xsd:appinfo>
-				<tool:annotation>
-					<tool:exports type="kite.circuitbreaker.interceptor.CircuitBreakerInterceptor" />
-				</tool:annotation>
-			</xsd:appinfo>
-		</xsd:annotation>
-		<xsd:complexType>
-			<xsd:complexContent>
-				<xsd:extension base="beans:identifiedType">
-					<xsd:attribute name="breaker" type="xsd:string" use="required">
-						<xsd:annotation>
-							<xsd:appinfo>
-								<tool:annotation kind="ref">
-									<tool:expected-type type="kite.circuitbreaker.CircuitBreakerTemplate" />
-								</tool:annotation>
-							</xsd:appinfo>
-						</xsd:annotation>
-					</xsd:attribute>
-				</xsd:extension>
-			</xsd:complexContent>
-		</xsd:complexType>
-	</xsd:element>
-	
-	
-	<!-- =========================================================================================================== -->
-	<!-- Concurrency throttle                                                                                        -->
-	<!-- =========================================================================================================== -->
 
 	<xsd:element name="concurrency-throttle">
 		<xsd:annotation>
@@ -136,39 +133,6 @@ Creates a ConcurrencyThrottleTemplate having the specified configuration.
 		</xsd:complexType>
 	</xsd:element>
 	
-	<xsd:element name="concurrency-throttle-advice">
-		<xsd:annotation>
-			<xsd:documentation><![CDATA[
-Creates a ConcurrencyThrottleInterceptor bean having the specified configuration.
-			]]></xsd:documentation>
-			<xsd:appinfo>
-				<tool:annotation>
-					<tool:exports type="org.zkybase.kite.throttle.interceptor.ConcurrencyThrottleInterceptor" />
-				</tool:annotation>
-			</xsd:appinfo>
-		</xsd:annotation>
-		<xsd:complexType>
-			<xsd:complexContent>
-				<xsd:extension base="beans:identifiedType">
-					<xsd:attribute name="throttle" type="xsd:string">
-						<xsd:annotation>
-							<xsd:appinfo>
-								<tool:annotation kind="ref">
-									<tool:expected-type type="org.zkybase.kite.guard.ConcurrencyThrottleTemplate" />
-								</tool:annotation>
-							</xsd:appinfo>
-						</xsd:annotation>
-					</xsd:attribute>
-				</xsd:extension>
-			</xsd:complexContent>
-		</xsd:complexType>
-	</xsd:element>
-	
-	
-	<!-- =========================================================================================================== -->
-	<!-- Rate-limiting throttle                                                                                      -->
-	<!-- =========================================================================================================== -->
-	
 	<xsd:element name="rate-limiting-throttle">
 		<xsd:annotation>
 			<xsd:documentation><![CDATA[
@@ -184,34 +148,6 @@ Creates a RateLimitingThrottleTemplate having the specified configuration.
 			<xsd:complexContent>
 				<xsd:extension base="beans:identifiedType">
 					<xsd:attribute name="limit" type="xsd:integer" />
-				</xsd:extension>
-			</xsd:complexContent>
-		</xsd:complexType>
-	</xsd:element>
-	
-	<xsd:element name="rate-limiting-throttle-advice">
-		<xsd:annotation>
-			<xsd:documentation><![CDATA[
-Creates a RateLimitingThrottleInterceptor bean having the specified configuration.
-			]]></xsd:documentation>
-			<xsd:appinfo>
-				<tool:annotation>
-					<tool:exports type="org.zkybase.kite.throttle.interceptor.RateLimitingThrottleInterceptor" />
-				</tool:annotation>
-			</xsd:appinfo>
-		</xsd:annotation>
-		<xsd:complexType>
-			<xsd:complexContent>
-				<xsd:extension base="beans:identifiedType">
-					<xsd:attribute name="throttle" type="xsd:string">
-						<xsd:annotation>
-							<xsd:appinfo>
-								<tool:annotation kind="ref">
-									<tool:expected-type type="org.zkybase.kite.guard.RateLimitingThrottleTemplate" />
-								</tool:annotation>
-							</xsd:appinfo>
-						</xsd:annotation>
-					</xsd:attribute>
 				</xsd:extension>
 			</xsd:complexContent>
 		</xsd:complexType>
