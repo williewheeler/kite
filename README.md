@@ -29,7 +29,7 @@ steps. First, you'll need to create the circuit breaker and throttle:
     <concurrency-throttle id="messageServiceThrottle" limit="50" />
     <rate-limiting-throttle id="messageServiceRateLimiter" limit="5000" />
 
-    <!-- Export the breaker and throttle as MBeans -->
+    <!-- Export the guards as MBeans -->
     <context:mbean-export />
 
 </beans:beans>
