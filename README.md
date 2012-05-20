@@ -34,10 +34,7 @@ required:
 
 ```java
 @Service
-@Transactional(
-    propagation = Propagation.REQUIRED,
-    isolation = Isolation.DEFAULT,
-    readOnly = true)
+@Transactional
 public class MessageServiceImpl implements MessageService {
 
     @GuardedBy({ "messageServiceThrottle", "messageServiceBreaker" })
