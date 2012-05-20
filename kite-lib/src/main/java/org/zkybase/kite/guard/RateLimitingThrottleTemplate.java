@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -48,6 +49,7 @@ public class RateLimitingThrottleTemplate extends AbstractGuard {
 		this.currentHour = (int) (System.currentTimeMillis() / MILLIS_PER_HOUR);
 	}
 	
+	@ManagedAttribute(description = "Hourly per-principal rate limit, after which requests are rejected")
 	public int getLimit() { return limit; }
 	
 	public <T> T execute(GuardCallback<T> action) throws Throwable {
