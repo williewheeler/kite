@@ -12,6 +12,8 @@
 	<mvc:annotation-driven />
 	<mvc:default-servlet-handler />
 	
+	<mvc:view-controller path="/login" view-name="redirect:/" />
+	
 	<context:component-scan base-package="org.zkybase.kite.samples.web" />
 	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"

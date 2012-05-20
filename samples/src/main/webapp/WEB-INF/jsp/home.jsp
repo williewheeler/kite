@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+
+<c:url var="loginUrl" value="/login" />
+<c:url var="logoutUrl" value="/j_spring_security_logout" />
 
 <html lang="en">
 	<head>
@@ -10,6 +14,13 @@
 		<header>
 			<h1>Aggro's Towne BBS</h1>
 		</header>
+		
+		<security:authorize access="isAnonymous()">
+			<p><a href="${loginUrl}">[Login]</a> (use either willie/willie or ray/ray)</p>
+		</security:authorize>
+		<security:authorize access="isAuthenticated()">
+			<p><a href="${logoutUrl}">[Logout]</a></p>
+		</security:authorize>
 		
 		<section>
 			<header>

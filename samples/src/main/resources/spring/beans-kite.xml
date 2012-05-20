@@ -14,7 +14,7 @@
 	<annotation-config order="0" />
 	
 	<!-- Common -->
-	<rate-limiting-throttle id="rateLimitingThrottle" limit="5000" />
+	<rate-limiting-throttle id="rateLimitingThrottle" limit="200" />
 	
 	<!-- Message service -->
 	<circuit-breaker id="messageServiceBreaker" exceptionThreshold="4" timeout="30000" />

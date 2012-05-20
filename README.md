@@ -37,9 +37,6 @@ takes is two easy steps.
 </beans:beans>
 ```
 
-[**NOTE:** The rate-limiter doesn't actually perform any rate-limiting yet. It just does a pass-through. I'll fix this
-when I get the chance.]
-
 **Step 2.** Second, you'll need to annotate the service methods. I'm assuming a transactional service here, though that's not
 required:
 
@@ -88,8 +85,8 @@ exception types.
 **Concurrency throttle:** A fail-fast concurrency throttle that rejects requests once a configurable concurrency limit
 is reached. Eventually throttles will be able to reject requests based on failure to meet SLAs.
 
-**Rate-limiting throttle:** A throttle that rejects requests after the client reaches a configurable limit on the
-number of requests in some time period.
+**Rate-limiting throttle:** A throttle that rejects requests after the principal reaches a configurable limit on the
+number of requests in some time period. The rate limiter uses Spring Security to determine the principal involved.
 
 I very much welcome contributions. It's pretty easy to add a new guard; just look at `org.zkybase.kite.guard` to see how
 to do it.
