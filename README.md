@@ -21,10 +21,6 @@ steps. First, you'll need to create the circuit breaker and throttle:
         http://zkybase.org/schema/kite
         http://zkybase.org/schema/kite/kite-1.0-a3.xsd">
 
-<beans:beans xmlns="http://zkybase.org/schema/kite"
-    xmlns:beans="http://www.springframework.org/schema/beans"
-    xmlns:context="http://www.springframework.org/schema/context" ...>
-
     <!-- Activate Kite annotations -->
     <annotation-config />
     
