@@ -4,14 +4,23 @@ performance and capacity. Based in part upon patterns in the Release It! book by
 Harden your app in two easy steps
 =================================
 
-Let's say you want to protect an integration point with a
-so-called circuit breaker on the client side and a throttle on
-the service side. While you could certainly code that logic by
-hand, with Kite you don't need to do that. Instead all it takes
-is two steps. First, you'll need to create the circuit breaker
-and throttle:
+Let's say you want to protect an integration point with a concurrency throttle, rate limiter and circuit breaker. While
+While you could certainly code that logic by hand, with Kite you don't need to do that. Instead all it takes is two
+steps. First, you'll need to create the circuit breaker and throttle:
 
 ```xml
+<beans:beans xmlns="http://zkybase.org/schema/kite"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://zkybase.org/schema/kite
+        http://zkybase.org/schema/kite/kite-1.0-a3.xsd">
+
 <beans:beans xmlns="http://zkybase.org/schema/kite"
     xmlns:beans="http://www.springframework.org/schema/beans"
     xmlns:context="http://www.springframework.org/schema/context" ...>
@@ -29,6 +38,9 @@ and throttle:
 
 </beans:beans>
 ```
+
+[**NOTE:** The rate-limiter doesn't actually perform any rate-limiting yet. It just does a pass-through. I'll fix this
+when I get the chance.]
 
 Second, you'll need to annotate the service methods. I'm assuming a transactional service here, though that's not
 required:
