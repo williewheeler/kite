@@ -4,9 +4,11 @@ performance and capacity. Based in part upon patterns in the Release It! book by
 Harden your app in two easy steps
 =================================
 
-Let's say you want to protect an integration point with a concurrency throttle, rate limiter and circuit breaker. While
-While you could certainly code that logic by hand, with Kite you don't need to do that. Instead all it takes is two
-steps. First, you'll need to create the circuit breaker and throttle:
+Let's say you want to protect an integration point with three guards: a concurrency throttle, a rate limiter and a
+circuit breaker. While you could certainly code that logic by hand, with Kite you don't need to do that. Instead all it
+takes is two easy steps.
+
+**Step 1.** First, you'll need to configure your guards:
 
 ```xml
 <beans:beans xmlns="http://zkybase.org/schema/kite"
@@ -38,7 +40,7 @@ steps. First, you'll need to create the circuit breaker and throttle:
 [**NOTE:** The rate-limiter doesn't actually perform any rate-limiting yet. It just does a pass-through. I'll fix this
 when I get the chance.]
 
-Second, you'll need to annotate the service methods. I'm assuming a transactional service here, though that's not
+**Step 2.** Second, you'll need to annotate the service methods. I'm assuming a transactional service here, though that's not
 required:
 
 ```java
@@ -69,7 +71,7 @@ available.
 Overview of components
 ======================
 
-This is a brand-new project, so there's not much yet, but here's what exists now:
+This is a new-ish project, so there's not much yet, but here's what exists now:
 
 **Circuit breaker:** Trips after a configurable number of consecutive exceptions, and retries after a configurable
 timeout. Eventually it will be possible to trip based of failure rates, and it will be possible to select specific
