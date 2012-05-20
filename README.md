@@ -48,10 +48,18 @@ required:
 @Transactional
 public class MessageServiceImpl implements MessageService {
 
-    @GuardedBy({ "messageServiceThrottle", "messageServiceRateLimiter", "messageServiceBreaker" })
+    @GuardedBy({
+        "messageServiceThrottle",
+        "messageServiceRateLimiter",
+        "messageServiceBreaker"
+    })
     public Message getMotd() { ... }
 
-    @GuardedBy({ "messageServiceThrottle", "messageServiceRateLimiter", "messageServiceBreaker" })
+    @GuardedBy({
+        "messageServiceThrottle",
+        "messageServiceRateLimiter",
+        "messageServiceBreaker"
+    })
     public List<Message> getMessages() { ... }
 }
 ```
