@@ -1,2 +1,2 @@
-http\://zkybase.org/schema/kite/kite-1.0-a3.xsd=kite/config/kite-1.0-a3.xsd
-http\://zkybase.org/schema/kite/kite.xsd=kite/config/kite-1.0-a3.xsd
+http\://zkybase.org/schema/kite/kite.xsd=kite/config/kite-0.5.xsd
+http\://zkybase.org/schema/kite/kite-0.5.xsd=kite/config/kite-0.5.xsd

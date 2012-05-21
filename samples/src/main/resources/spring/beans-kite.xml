@@ -10,7 +10,7 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context-3.1.xsd
 		http://zkybase.org/schema/kite
-		http://zkybase.org/schema/kite/kite-1.0-a3.xsd">
+		http://zkybase.org/schema/kite/kite-0.5.xsd">
 
 	<context:mbean-export />
 	

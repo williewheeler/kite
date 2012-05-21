@@ -15,8 +15,34 @@
 		Spring-based library of components to improve application stability. These are based largely on ideas from
 		Michael Nygard's book, Release It! (Pragmatic).
 	</description>
-	<url>http://zkybase.org/</url>
+	<url>http://zkybase.org/kite/</url>
 	<inceptionYear>2010</inceptionYear>
+	<licenses>
+		<license>
+			<name>Apache 2</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
+	<scm>
+		<connection>git://github.com/williewheeler/kite.git</connection>
+		<developerConnection>git@github.com:williewheeler/kite.git</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/williewheeler/kite</url>
+	</scm>
+	<developers>
+		<developer>
+			<id>williewheeler</id>
+			<name>Willie Wheeler</name>
+			<email>willie.wheeler@gmail.com</email>
+			<url>http://springinpractice.com/</url>
+			<roles>
+				<role>owner</role>
+				<role>developer</role>
+			</roles>
+		</developer>
+	</developers>
 	
 	<modules>
 		<module>kite-lib</module>
@@ -31,10 +57,6 @@
 		<spring.version>3.1.1.RELEASE</spring.version>
 		<spring.security.version>3.1.0.RELEASE</spring.security.version>
 	</properties>
-	
-	<scm>
-		<url>https://github.com/williewheeler/kite</url>
-	</scm>
 	
 	<dependencyManagement>
 		<dependencies>
@@ -122,16 +144,4 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
-	<developers>
-		<developer>
-			<id>williewheeler</id>
-			<name>Willie Wheeler</name>
-			<email>willie.wheeler@gmail.com</email>
-			<url>http://springinpractice.com/</url>
-			<roles>
-				<role>Owner</role>
-			</roles>
-		</developer>
-	</developers>
 </project>
