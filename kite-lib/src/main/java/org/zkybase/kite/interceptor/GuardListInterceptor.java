@@ -100,10 +100,13 @@ public class GuardListInterceptor implements MethodInterceptor {
 					try {
 						log.debug("Entered guard: {}", guard.getName());
 						return interceptor.invoke();
+					} catch (Exception e) {
+						throw e;
 					} catch (Error e) {
 						throw e;
 					} catch (Throwable t) {
-						throw (Exception) t;
+						// This shouldn't happen since all Throwables are Exceptions or Errors, but being paranoid
+						throw new RuntimeException(t);
 					} finally {
 						log.debug("Exiting guard: {}", guard.getName());
 					}
@@ -131,10 +134,13 @@ public class GuardListInterceptor implements MethodInterceptor {
 						log.debug("Entered guard: {}", guard.getName());
 						log.debug("Executing target method: {}", invocation.getMethod().getName());
 						return invocation.proceed();
+					} catch (Exception e) {
+						throw e;
 					} catch (Error e) {
 						throw e;
 					} catch (Throwable t) {
-						throw (Exception) t;
+						// This shouldn't happen since all Throwables are Exceptions or Errors, but being paranoid
+						throw new RuntimeException(t);
 					} finally {
 						log.debug("Exiting guard: {}", guard.getName());
 					}
