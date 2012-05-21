@@ -21,5 +21,5 @@ package org.zkybase.kite;
  */
 public interface GuardCallback<T> {
 	
-	T doInGuard() throws Throwable;
+	T doInGuard() throws Exception;
 }

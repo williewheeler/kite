@@ -19,8 +19,8 @@ import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 
 /**
- * @version $Id$
  * @author Willie Wheeler (willie.wheeler@gmail.com)
+ * @since 1.0
  */
 public abstract class AbstractGuard implements Guard, BeanNameAware {
 	private String name;

@@ -96,10 +96,14 @@ public class GuardListInterceptor implements MethodInterceptor {
 			return guard.execute(new GuardCallback<Object>() {
 				
 				@Override
-				public Object doInGuard() throws Throwable {
+				public Object doInGuard() throws Exception {
 					try {
 						log.debug("Entered guard: {}", guard.getName());
 						return interceptor.invoke();
+					} catch (Error e) {
+						throw e;
+					} catch (Throwable t) {
+						throw (Exception) t;
 					} finally {
 						log.debug("Exiting guard: {}", guard.getName());
 					}
@@ -122,11 +126,15 @@ public class GuardListInterceptor implements MethodInterceptor {
 			return guard.execute(new GuardCallback<Object>() {
 
 				@Override
-				public Object doInGuard() throws Throwable {
+				public Object doInGuard() throws Exception {
 					try {
 						log.debug("Entered guard: {}", guard.getName());
 						log.debug("Executing target method: {}", invocation.getMethod().getName());
 						return invocation.proceed();
+					} catch (Error e) {
+						throw e;
+					} catch (Throwable t) {
+						throw (Exception) t;
 					} finally {
 						log.debug("Exiting guard: {}", guard.getName());
 					}

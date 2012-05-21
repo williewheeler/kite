@@ -57,7 +57,7 @@ import org.zkybase.kite.exception.CircuitOpenException;
  * (Pragmatic).
  * </p>
  * 
- * @author Willie Wheeler
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
  */
 @ManagedResource
@@ -242,7 +242,7 @@ public class CircuitBreakerTemplate extends AbstractGuard {
 	 * @throws Exception
 	 *             exception thrown by the action, if any
 	 */
-	public <T> T execute(GuardCallback<T> action) throws Throwable {
+	public <T> T execute(GuardCallback<T> action) throws Exception {
 		final State currState = getState();
 		switch (currState) {
 

@@ -18,7 +18,7 @@ package org.zkybase.kite.exception;
 /**
  * Runtime exception indicating that a call protected by a circuit breaker failed due to an open circuit.
  * 
- * @author Willie Wheeler
+ * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
  */
 @SuppressWarnings("serial")

@@ -52,7 +52,7 @@ public class RateLimitingThrottleTemplate extends AbstractGuard {
 	@ManagedAttribute(description = "Hourly per-principal rate limit, after which requests are rejected")
 	public int getLimit() { return limit; }
 	
-	public <T> T execute(GuardCallback<T> action) throws Throwable {
+	public <T> T execute(GuardCallback<T> action) throws Exception {
 		resetCountsOnTheHour();
 		Object principal = getPrincipal();
 		int count = getCount(principal);

@@ -15,7 +15,6 @@
  */
 package org.zkybase.kite;
 
-
 /**
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
@@ -24,5 +23,5 @@ public interface Guard {
 	
 	String getName();
 	
-	<T> T execute(GuardCallback<T> action) throws Throwable;
+	<T> T execute(GuardCallback<T> action) throws Exception;
 }

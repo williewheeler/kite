@@ -58,7 +58,7 @@ public class ConcurrencyThrottleTemplate extends AbstractGuard {
 	@ManagedAttribute(description = "Concurrency limit, after which requests are rejected")
 	public int getLimit() { return limit; }
 	
-	public <T> T execute(GuardCallback<T> action) throws Throwable {
+	public <T> T execute(GuardCallback<T> action) throws Exception {
 		if (semaphore.tryAcquire()) {
 			try {
 				return action.doInGuard();

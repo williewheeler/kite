@@ -81,13 +81,13 @@ public final class KiteObjectMother {
 		when(breaker.execute(isA(GuardCallback.class))).thenReturn("Planet of Sound");
 		
 		this.goodBreakerAction = new GuardCallback<String>() {
-			public String doInGuard() throws Throwable {
+			public String doInGuard() throws Exception {
 				return "good";
 			}
 		};
 		
 		this.badBreakerAction = new GuardCallback<String>() {
-			public String doInGuard() throws Throwable {
+			public String doInGuard() throws Exception {
 				// Use shared exception to speed up calls in tight loops. This
 				// is much faster than creating a new exception each time.
 				throw serviceException;
@@ -95,7 +95,7 @@ public final class KiteObjectMother {
 		};
 		
 		this.breakerActionThatAlwaysThrowsSqlException = new GuardCallback<String>() {
-			public String doInGuard() throws Throwable {
+			public String doInGuard() throws Exception {
 				throw new SQLException();
 			}
 		};
@@ -103,13 +103,13 @@ public final class KiteObjectMother {
 
 	private void initThrottleStuff() {
 		this.throttleAction = new GuardCallback<String>() {
-			public String doInGuard() throws Throwable {
+			public String doInGuard() throws Exception {
 				return "good";
 			}
 		};
 		
 		this.slowThrottleAction = new GuardCallback<String>() {
-			public String doInGuard() throws Throwable {
+			public String doInGuard() throws Exception {
 				Thread.sleep(1000L);
 				return "good";
 			}
