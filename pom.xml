@@ -5,10 +5,10 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	
-	<groupId>org.zkybase.kite</groupId>
+	<groupId>org.zkybase</groupId>
 	<artifactId>kite</artifactId>
 	<version>0.5.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 	
 	<name>Kite</name>
 	<description>
@@ -26,6 +26,7 @@
 			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
+	
 	<scm>
 		<connection>git://github.com/williewheeler/kite.git</connection>
 		<developerConnection>git@github.com:williewheeler/kite.git</developerConnection>
@@ -46,11 +47,6 @@
 		</developer>
 	</developers>
 	
-	<modules>
-		<module>kite-lib</module>
-		<module>samples</module>
-	</modules>
-	
 	<properties>
 		<junit.version>4.10</junit.version>
 		<hamcrest.version>1.1</hamcrest.version>
@@ -60,90 +56,88 @@
 		<spring.security.version>3.1.0.RELEASE</spring.security.version>
 	</properties>
 	
-	<dependencyManagement>
-		<dependencies>
+	<dependencies>
+	
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
 		
-			<!-- Spring -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-beans</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			
-			<!-- Spring Security -->
-			<dependency>
-				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-config</artifactId>
-				<version>${spring.security.version}</version>
-				<optional>true</optional>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-core</artifactId>
-				<version>${spring.security.version}</version>
-				<optional>true</optional>
-			</dependency>
-			
-			<!-- Logging -->
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-				<version>${slf4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>${slf4j.version}</version>
-				<scope>runtime</scope>
-			</dependency>
-			
-			<!-- Test -->
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${junit.version}</version>
-				<scope>test</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.hamcrest</groupId>
-						<artifactId>hamcrest-core</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.mockito</groupId>
-				<artifactId>mockito-core</artifactId>
-				<version>${mockito.version}</version>
-				<scope>test</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.hamcrest</groupId>
-						<artifactId>hamcrest-core</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.hamcrest</groupId>
-				<artifactId>hamcrest-core</artifactId>
-				<version>${hamcrest.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.hamcrest</groupId>
-				<artifactId>hamcrest-library</artifactId>
-				<version>${hamcrest.version}</version>
-				<scope>test</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+		<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.security.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring.security.version}</version>
+			<optional>true</optional>
+		</dependency>
+		
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<!-- Test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hamcrest</groupId>
+					<artifactId>hamcrest-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hamcrest</groupId>
+					<artifactId>hamcrest-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-core</artifactId>
+			<version>${hamcrest.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+			<version>${hamcrest.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 </project>
