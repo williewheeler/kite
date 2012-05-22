@@ -31,6 +31,8 @@ public class DefaultGuardListSource implements GuardListSource {
 	
 	public List<Guard> getGuards() { return guards; }
 	
+	public void setGuards(List<Guard> guards) { this.guards = guards; }
+	
 	/* (non-Javadoc)
 	 * @see org.zkybase.kite.interceptor.GuardListSource#getGuards(java.lang.reflect.Method, java.lang.Class)
 	 */
