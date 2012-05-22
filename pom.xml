@@ -17,6 +17,7 @@
 	</description>
 	<url>http://zkybase.org/kite/</url>
 	<inceptionYear>2010</inceptionYear>
+	
 	<licenses>
 		<license>
 			<name>Apache 2</name>
@@ -31,6 +32,7 @@
 		<tag>HEAD</tag>
 		<url>https://github.com/williewheeler/kite</url>
 	</scm>
+	
 	<developers>
 		<developer>
 			<id>williewheeler</id>

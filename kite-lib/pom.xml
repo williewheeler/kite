@@ -12,7 +12,8 @@
 		<relativePath>..</relativePath>
 	</parent>
 	
-	<artifactId>kitelib</artifactId>
+	<groupId>org.zkybase</groupId>
+	<artifactId>kite</artifactId>
 	
 	<name>Kite Library</name>
 	<description>The component library</description>
