@@ -55,6 +55,7 @@ public class GuardListInterceptorTests {
 	private List<Guard> guards;
 	
 	@Before
+	@SuppressWarnings("unchecked")
 	public void setUp() throws Throwable {
 		this.interceptorWithGuards = new GuardListInterceptor();
 		this.interceptorNoGuards = new GuardListInterceptor();
