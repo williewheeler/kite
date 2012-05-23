@@ -16,10 +16,16 @@
 package org.zkybase.kite;
 
 /**
+ * Callback interface for the {@link Guard} template.
+ * 
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
  */
 public interface GuardCallback<T> {
 	
+	/**
+	 * @return execution result
+	 * @throws Exception if there's a problem executing the callback
+	 */
 	T doInGuard() throws Exception;
 }

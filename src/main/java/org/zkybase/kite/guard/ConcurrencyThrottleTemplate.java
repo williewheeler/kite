@@ -27,10 +27,13 @@ import org.zkybase.kite.exception.ConcurrencyLimitExceededException;
 
 /**
  * <p>
- * Template component that fails with an exception when a concurrency threshold is exceeded.
+ * Guard that fails with an exception when a concurrency threshold is exceeded.
  * </p>
  * <p>
  * Implementation is based on a counting semaphore.
+ * </p>
+ * <p>
+ * We expose this guard as a JMX MBean so it can be queried and manipulated in management contexts.
  * </p>
  * 
  * @author Willie Wheeler (willie.wheeler@gmail.com)
@@ -44,7 +47,9 @@ public class ConcurrencyThrottleTemplate extends AbstractGuard {
 	private final Semaphore semaphore;
 
 	/**
-	 * @param limit
+	 * Creates a concurrency throttle with the given limit. The throttle rejects requests in excess of the limit.
+	 * 
+	 * @param limit concurrency limit
 	 * @throws IllegalArgumentException if limit &lt; 1
 	 */
 	public ConcurrencyThrottleTemplate(int limit) {

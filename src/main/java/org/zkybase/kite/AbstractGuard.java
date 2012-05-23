@@ -19,6 +19,8 @@ import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 
 /**
+ * Abstract base class for implementing guards.
+ * 
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
  */

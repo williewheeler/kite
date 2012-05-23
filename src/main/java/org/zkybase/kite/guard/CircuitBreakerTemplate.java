@@ -15,6 +15,9 @@
  */
 package org.zkybase.kite.guard;
 
+import static org.springframework.util.Assert.isTrue;
+import static org.springframework.util.Assert.notNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,37 +27,38 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
-import org.springframework.util.Assert;
 import org.zkybase.kite.AbstractGuard;
 import org.zkybase.kite.GuardCallback;
 import org.zkybase.kite.exception.CircuitOpenException;
 
 /**
  * <p>
- * Template for circuit breakers, which are components designed to protect
- * clients from broken services by preventing faults from propagating across
- * integration points.
+ * Template for circuit breakers, which are components designed to protect clients from broken services by preventing
+ * faults from propagating across integration points.
  * </p>
  * <p>
- * For example, suppose that we have a web application that calls a web service.
- * If the web service is having a problem (e.g., severe latency or perhaps
- * complete unavailability), we don't want this to create problems for the app.
- * Instead we want to isolate the problem.
+ * For example, suppose that we have a web application that calls a web service. If the web service is having a problem
+ * (e.g., severe latency or perhaps complete unavailability), we don't want this to create problems for the app. Instead
+ * we want to isolate the problem.
  * </p>
  * <p>
- * The circuit breaker allows us to do just this. We associate a circuit breaker
- * with each integration point, and calls from the client to the service are
- * mediated by the breaker. Under normal circumstances the breaker is in the
- * closed state, and calls pass through to the service. If however there is a
- * problem, then the breaker goes into the open state for some period of time.
- * While the breaker is open, all attempts to call the service fail with a
- * {@link CircuitOpenException}. Once the problem is resolved, the breaker
- * returns to the closed state and normal operations resume.
+ * The circuit breaker allows us to do just this. We associate a circuit breaker with each integration point, and the
+ * breaker mediates calls from the client to the service. Under normal circumstances the breaker is in the closed state,
+ * and calls pass through to the service. If however there is a problem, then the breaker goes into the open state for
+ * some period of time. While the breaker is open, all attempts to call the service fail with a {@link
+ * CircuitOpenException}. Once the problem is resolved, the breaker returns to the closed state and normal operations
+ * resume.
  * </p>
  * <p>
- * The circuit breaker pattern is described in detail in Michael Nygard's book,
- * <a href="http://www.pragprog.com/titles/mnee/release-it">Release It!</a>
- * (Pragmatic).
+ * <img src="http://zkybase.org/kite/images/circuit-breaker-state-transition.png" alt="State transition diagram" />
+ * </p>
+ * <p>
+ * The circuit breaker pattern is described in detail in Michael Nygard's book, <a
+ * href="http://www.pragprog.com/titles/mnee/release-it">Release It!</a> (Pragmatic).
+ * </p>
+ * <p>
+ * We expose this guard as a JMX MBean so it can be queried and manipulated in management contexts. You can, for
+ * example, use JMX to trip and reset breakers manually.
  * </p>
  * 
  * @author Willie Wheeler (willie.wheeler@gmail.com)
@@ -77,9 +81,7 @@ public class CircuitBreakerTemplate extends AbstractGuard {
 	private final AtomicInteger exceptionCount = new AtomicInteger();
 	private volatile long retryTime = NO_SCHEDULED_RETRY;
 	
-	public CircuitBreakerTemplate() {
-		handledExceptions.add(Exception.class);
-	}
+	public CircuitBreakerTemplate() { handledExceptions.add(Exception.class); }
 
 	/**
 	 * <p>
@@ -90,9 +92,7 @@ public class CircuitBreakerTemplate extends AbstractGuard {
 	 * @return exception threshold for this breaker
 	 */
 	@ManagedAttribute(description = "Breaker trips when threshold is reached")
-	public int getExceptionThreshold() {
-		return exceptionThreshold;
-	}
+	public int getExceptionThreshold() { return exceptionThreshold; }
 
 	/**
 	 * <p>
@@ -112,7 +112,7 @@ public class CircuitBreakerTemplate extends AbstractGuard {
 		description = "Breaker trips when threshold is reached",
 		defaultValue = "5")
 	public void setExceptionThreshold(int threshold) {
-		Assert.isTrue(threshold >= 1, "threshold must be >= 1");
+		isTrue(threshold >= 1, "threshold must be >= 1");
 		this.exceptionThreshold = threshold;
 	}
 
@@ -141,7 +141,7 @@ public class CircuitBreakerTemplate extends AbstractGuard {
 		description = "Delay in ms before open breaker goes half-open",
 		defaultValue = "30000")
 	public void setTimeout(long timeout) {
-		Assert.isTrue(timeout >= 0L, "timeout must be >= 0");
+		isTrue(timeout >= 0L, "timeout must be >= 0");
 		this.timeout = timeout;
 	}
 	
@@ -150,7 +150,7 @@ public class CircuitBreakerTemplate extends AbstractGuard {
 	}
 	
 	public void setHandledExceptions(List<Class<? extends Exception>> exceptions) {
-		Assert.notNull(exceptions, "handledExceptions can't be null");
+		notNull(exceptions, "handledExceptions can't be null");
 		this.handledExceptions = exceptions;
 	}
 
