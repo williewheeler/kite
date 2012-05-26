@@ -1,0 +1,81 @@
+<html>
+	<head>
+		<title>Kite Overview</title>
+	</head>
+	<body>
+	
+<p>Kite is a Spring-based library of components helping you make your integrated systems more stable and performant. The
+central concept is that of a <i>guard</i>, and guards are essentially wrappers around integration points that protect
+both the service and the client. Guards protect services by blocking off client misbehavior (usually unintentional, but
+sometimes malicious). For example, if a client is calling a service too often, then a rate-limiting guard can help with
+that. Or if a service is having performance issues, sometimes clients respond by retrying over and over ("hammering").
+This only makes the problem worse. You can put a circuit breaker in place to cut the hammering off.</p>
+
+<p>On the client side, unresponsive services result in queuing, which propagates service availability and performance
+issues to the client by depleting client resources (e.g., threads). Circuit breakers help clients too because they
+return immediately when the service is unavailable.</p>
+
+<h2>Using Kite</h2>
+
+<p>Kite supports multiple models for adding guards to your app. These are generally aligned with common Spring Framework
+approaches. The recommended way is to use annotations and namespace configuration. Here's how that looks:</p>
+
+<h4>Step 1. Create your guards</h4>
+
+<pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans ...&gt;
+    &lt;kite:annotation-config /&gt;
+    &lt;kite:circuit-breaker id="circuitBreaker" exceptionThreshold="3" timeout="30000" /&gt;
+    &lt;kite:concurrency-throttle id="concurrencyThrottle" limit="50" /&gt;
+    &lt;kite:rate-limiting-throttle id="rateLimiter" limit="5000" /&gt;
+&lt;/beans&gt;</pre>
+
+<h4>Step 2. Annotate your service</h4>
+
+<pre><span>@</span>Service
+<span>@</span>Transactional
+public class MessageServiceImpl implements MessageService {
+
+    <span>@</span>GuardedBy({ "concurrencyThrottle", "rateLimiter", "circuitBreaker" })
+    public List&lt;Message&gt; getMessages() { ... }
+}</pre>
+
+<p>As you can see, there's very little fuss with this approach to using Kite.</p>
+
+<p>Kite also supports AOP-based guarding via interceptors, and programmatic guarding via templates. In fact, the
+namespace configuration is really just a wrapper around AOP interceptors, which in turn use templates. So the model
+forms a coherent stack.</p>
+
+<p>Finally, all guards are JMX MBeans, so you can manage them from a JMX console like JConsole or JVisualVM. You can
+for example manually trip and reset circuit breakers in this fashion, or adjust concurrency and rate limits.</p>
+
+<h2>Available guards</h2>
+
+<p>Kite is a new library so there aren't many guards yet. The good news, though, that that the guards that actually
+exist are broadly useful. More guards are on the way (e.g., a guard that limits requests to specific time windows)
+
+<table>
+	<tr>
+		<th style="text-align:left">Guard</th>
+		<th style="text-align:left">Description</th>
+	</tr>
+	<tr>
+		<td>Circuit breaker</td>
+		<td>Rejects requests when the backend service is generating too many exceptions for whatever reason. This
+		could be severe performance issues or outright unavailability. Helps the service get back on its feet if it's
+		a performance issue, and helps the client avoid queuing.</td>
+	</tr>
+	<tr>
+		<td>Concurrency throttle</td>
+		<td>Rejects requests when there are too many requests being serviced at once. This can be especially useful
+		for resource-intensive requests.</td>
+	</tr>
+	<tr>
+		<td>Rate limiter</td>
+		<td>Prevents too many requests from a single client coming in during a given time window. Useful for
+		implementing web services whose use you want to quota.</td>
+	</tr>
+</table>
+
+	</body>
+</html>

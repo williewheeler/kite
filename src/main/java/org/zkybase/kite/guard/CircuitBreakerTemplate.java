@@ -50,7 +50,7 @@ import org.zkybase.kite.exception.CircuitOpenException;
  * resume.
  * </p>
  * <p>
- * <img src="http://zkybase.org/kite/images/circuit-breaker-state-transition.png" alt="State transition diagram" />
+ * <img src="doc-files/circuit-breaker-state-transition.png" alt="State transition diagram" />
  * </p>
  * <p>
  * The circuit breaker pattern is described in detail in Michael Nygard's book, <a
