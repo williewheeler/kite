@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
- * <code>NamespaceHandler</code> allowing for declarative Kite configuration using either XML or using annotations.
+ * <code>NamespaceHandler</code> allowing for declarative Kite configuration using either XML or annotations.
  * 
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
