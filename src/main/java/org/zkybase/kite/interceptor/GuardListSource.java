@@ -21,6 +21,17 @@ import java.util.List;
 import org.zkybase.kite.Guard;
 
 /**
+ * <p>
+ * Strategy interface to return the list of guards associated with a given joinpoint. The {@link GuardListInterceptor}
+ * uses this to determine which guards to apply to the joinpoint.
+ * </p>
+ * <p>
+ * One strategy, for example, is the {@link DefaultGuardListSource}, which uses a fixed list, usually specified
+ * explicitly in the XML configuration. Another strategy, the {@link AnnotationGuardListSource}, uses annotations to
+ * specify the guards. It's possible to imagine even more dynamic guard list sources, such as a database. The ops team
+ * might for instance dynamically create and apply guard lists in a database through a management interface.
+ * </p>
+ * 
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
  */

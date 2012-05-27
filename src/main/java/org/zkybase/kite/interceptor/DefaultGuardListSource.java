@@ -21,7 +21,7 @@ import java.util.List;
 import org.zkybase.kite.Guard;
 
 /**
- * Source with a fixed guard list.
+ * Strategy returning a fixed guard list.
  * 
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0

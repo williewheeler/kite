@@ -32,6 +32,8 @@ import org.zkybase.kite.Guard;
 import org.zkybase.kite.GuardedBy;
 
 /**
+ * Strategy returning a guard list sourced from the {@link GuardedBy} annotation.
+ * 
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
  */
