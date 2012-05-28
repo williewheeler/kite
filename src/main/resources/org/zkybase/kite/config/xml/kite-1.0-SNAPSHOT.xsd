@@ -56,8 +56,6 @@ Defines the order of the Kite advice that is applied to beans annotated with Kit
 		</xsd:complexType>
 	</xsd:element>
 	
-	<!-- FIXME This isn't correct. The GuardListInterceptor doesn't have a settable guards property. -->
-	<!--
 	<xsd:element name="guard-list-advice">
 		<xsd:annotation>
 			<xsd:documentation><![CDATA[
@@ -85,7 +83,6 @@ Creates a GuardListInterceptor bean having the specified configuration.
 			</xsd:complexContent>
 		</xsd:complexType>
 	</xsd:element>
-	-->
 	
 	
 	<!-- =========================================================================================================== -->
@@ -99,7 +96,7 @@ Creates a CircuitBreakerTemplate bean having the specified configuration.
 			]]></xsd:documentation>
 			<xsd:appinfo>
 				<tool:annotation>
-					<tool:exports type="kite.circuitbreaker.CircuitBreakerTemplate" />
+					<tool:exports type="org.zkybase.xkite.circuitbreaker.CircuitBreakerTemplate" />
 				</tool:annotation>
 			</xsd:appinfo>
 		</xsd:annotation>

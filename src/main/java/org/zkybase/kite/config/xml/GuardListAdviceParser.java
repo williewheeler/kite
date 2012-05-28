@@ -53,7 +53,7 @@ class GuardListAdviceParser extends AbstractSingleBeanDefinitionParser {
 		RootBeanDefinition srcDef = new RootBeanDefinition(DefaultGuardListSource.class);
 		srcDef.setSource(elem);
 		srcDef.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		srcDef.getPropertyValues().add("guardList", new RuntimeBeanReference(elem.getAttribute("guardList")));
+		srcDef.getPropertyValues().add("guards", new RuntimeBeanReference(elem.getAttribute("guards")));
 		builder.addPropertyValue("source", srcDef);
 	}
 }
