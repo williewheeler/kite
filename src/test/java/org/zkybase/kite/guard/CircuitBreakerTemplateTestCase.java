@@ -39,7 +39,7 @@ import org.zkybase.kite.test.KiteObjectMother;
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
  */
-public class CircuitBreakerTemplateTests {
+public class CircuitBreakerTemplateTestCase {
 	private static KiteObjectMother mom = KiteObjectMother.instance();
 	
 	// Class under test

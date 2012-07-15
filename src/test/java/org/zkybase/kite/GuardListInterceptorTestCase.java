@@ -39,7 +39,7 @@ import org.zkybase.kite.interceptor.GuardListSource;
  * @author Willie Wheeler (willie.wheeler@gmail.com)
  * @since 1.0
  */
-public class GuardListInterceptorTests {
+public class GuardListInterceptorTestCase {
 	
 	// Class under test
 	@InjectMocks private GuardListInterceptor interceptorWithGuards;
